@@ -11,8 +11,14 @@ from rich.columns import Columns
 from rich.panel import Panel
 from rich.rule import Rule
 from rich import box
+codex/create-multi-page-modular-system-oulpl3
 
 from utils.animation import decrypt_print
+
+
+
+from utils.animation import decrypt_print
+
 
 # ─────────────────────────────────────────────
 #  ASCII ART DEFINITION
@@ -63,6 +69,14 @@ def glow_color(distance: float) -> str:
     else:
         # Dim base: deep navy
         r, g, b = 15, 30, 90
+codex/create-multi-page-modular-system-oulpl3
+
+    r = max(0, min(255, r))
+    g = max(0, min(255, g))
+    b = max(0, min(255, b))
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+ main
 
     r = max(0, min(255, r))
     g = max(0, min(255, g))
@@ -74,6 +88,13 @@ def glow_color(distance: float) -> str:
 #  ANIMATED TITLE RENDERER
 # ─────────────────────────────────────────────
 
+codex/create-multi-page-modular-system-oulpl3
+# ─────────────────────────────────────────────
+#  ANIMATED TITLE RENDERER
+# ─────────────────────────────────────────────
+
+=======
+ main
 def render_title(glow_x: float, art_width: int) -> Text:
     """Render the ASCII art with a vertical glow sweep."""
     result = Text()
@@ -192,13 +213,25 @@ def main():
                 time.sleep(frame_delay)
 
         console.clear()
+codex/create-multi-page-modular-system-oulpl3
+        console.print(Align.left(build_frame(glow_x, tick)))
+        decrypt_print("\n[ MENU ENCRYPTED INTERFACE ]\n")
+        for i in range(1, 11):
+            decrypt_print(f"[{i}] Tool {i}\n")
+        decrypt_print("[0] Exit\n")
+
         print(build_frame(glow_x, tick))
+main
         decrypt_print("\n[ KERNEL TOOL ] Enter option (0-10): ")
         user_input = input().strip()
 
         if user_input == "0":
             decrypt_print("\nTerminating session...\n")
+codex/create-multi-page-modular-system-oulpl3
+            decrypt_print("◈  KERNEL TOOL terminated.\n")
+
             console.print("\n[bold #00cfff]  ◈  KERNEL TOOL terminated.[/]\n")
+ main
             sys.exit(0)
 
         if user_input.isdigit() and 1 <= int(user_input) <= 10:
