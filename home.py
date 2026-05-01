@@ -35,11 +35,10 @@ ASCII_LINES = """
 
 SUBTITLE = "[ Copyright (c) 2026 LXKCV and Astral ]"
 MENU_ITEMS = [
-    ("[1]", "Data Pipeline"),
+    ("[1]", "Data"),
     ("[2]", "Cyber Defense"),
     ("[3]", "OSINT"),
     ("[4]", "Web Recon"),
-    ("[Q]", "Quit"),
 ]
 
 
