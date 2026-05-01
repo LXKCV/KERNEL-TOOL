@@ -73,6 +73,7 @@ def render_subtitle(glow_x: float, art_width: int) -> Text:
 
 
 
+
 def render_menu() -> Text:
     menu = Text()
     menu.append("\n  ╔═══════════════════════════════════════════╗\n", style="#0a2a6e")
@@ -144,4 +145,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+
