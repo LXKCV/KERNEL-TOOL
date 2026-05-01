@@ -5,7 +5,7 @@ from rich.text import Text
 from rich.live import Live
 from rich.align import Align
 
-from modules.cyber_defense import cyber_defense_menu
+
 
 ASCII_LINES = [
     r" ██╗  ██╗███████╗██████╗ ███╗   ██╗███████╗██╗     ",
@@ -72,6 +72,7 @@ def render_subtitle(glow_x: float, art_width: int) -> Text:
     return result
 
 
+
 def render_menu() -> Text:
     menu = Text()
     menu.append("\n  ╔═══════════════════════════════════════════╗\n", style="#0a2a6e")
@@ -100,7 +101,7 @@ def build_frame(glow_x: float) -> Text:
     return frame
 
 
-def show_splash(console: Console, seconds: float = 2.0) -> None:
+
     fps = 30
     glow_x = -20.0
     end = time.time() + seconds
@@ -135,12 +136,11 @@ def main_menu(console: Console) -> None:
 def main() -> None:
     console = Console()
     try:
-        show_splash(console)
-        main_menu(console)
+
     except KeyboardInterrupt:
-        console.clear()
-        console.print("\n[bold #00cfff]  ◈  KERNEL TOOL terminated.[/]\n")
-        sys.exit(0)
+        pass
+
+    run_main_menu(console)
 
 
 if __name__ == "__main__":
