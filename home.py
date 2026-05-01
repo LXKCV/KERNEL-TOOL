@@ -11,6 +11,8 @@ from rich.panel import Panel
 from rich.rule import Rule
 from rich import box
 
+from modules.osint import run_osint_menu
+
 # ─────────────────────────────────────────────
 #  ASCII ART DEFINITION
 # ─────────────────────────────────────────────
@@ -126,6 +128,7 @@ MENU_ITEMS = [
     ("[3]", "File Inspector"),
     ("[4]", "System Info"),
     ("[5]", "Crypto Vault"),
+    ("[6]", "OSINT"),
     ("[Q]", "Quit"),
 ]
 
@@ -174,12 +177,28 @@ def build_frame(glow_x: float, tick: int) -> Text:
 #  MAIN ANIMATION LOOP
 # ─────────────────────────────────────────────
 
+def run_main_menu(console: Console) -> None:
+    while True:
+        console.clear()
+        frame = build_frame(-10, 0)
+        console.print(Align.left(frame))
+        choice = input("\n  Select option: ").strip().lower()
+        if choice == "6":
+            run_osint_menu(console)
+        elif choice == "q":
+            console.clear()
+            console.print("\n[bold #00cfff]  ◈  KERNEL TOOL terminated.[/]\n")
+            return
+        else:
+            console.print("[bold #00cfff]Feature placeholder.[/]")
+            time.sleep(1)
+
+
 def main():
     console = Console()
     console.clear()
 
-    # Glow sweep parameters
-    sweep_speed = 2.5          # columns per frame
+    sweep_speed = 2.5
     glow_cycle = ART_WIDTH + 40
     fps = 30
     frame_delay = 1.0 / fps
@@ -189,22 +208,18 @@ def main():
 
     try:
         with Live(console=console, refresh_per_second=fps, screen=True) as live:
-            while True:
+            for _ in range(120):
                 frame = build_frame(glow_x, tick)
                 live.update(Align.left(frame))
-
-                # Advance glow
                 glow_x += sweep_speed
                 if glow_x > glow_cycle:
                     glow_x = -20.0
-
                 tick += 1
                 time.sleep(frame_delay)
-
     except KeyboardInterrupt:
-        console.clear()
-        console.print("\n[bold #00cfff]  ◈  KERNEL TOOL terminated.[/]\n")
-        sys.exit(0)
+        pass
+
+    run_main_menu(console)
 
 
 if __name__ == "__main__":
