@@ -11,6 +11,8 @@ from rich.panel import Panel
 from rich.rule import Rule
 from rich import box
 
+from modules.web_recon import run_web_recon_menu
+
 # ─────────────────────────────────────────────
 #  ASCII ART DEFINITION
 # ─────────────────────────────────────────────
@@ -121,7 +123,7 @@ def render_status(tick: int) -> Text:
 # ─────────────────────────────────────────────
 
 MENU_ITEMS = [
-    ("[1]", "Network Scanner"),
+    ("[1]", "Web Recon"),
     ("[2]", "Process Monitor"),
     ("[3]", "File Inspector"),
     ("[4]", "System Info"),
@@ -208,4 +210,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "--web-recon" in sys.argv:
+        run_web_recon_menu()
+    else:
+        main()
