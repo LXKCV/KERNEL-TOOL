@@ -73,7 +73,6 @@ def listen_ctrl_x(callback):
 def run() -> None:
     def _go_home() -> None:
         import home
-
         home.main()
 
     def _render() -> None:
