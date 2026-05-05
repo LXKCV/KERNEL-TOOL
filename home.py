@@ -1,6 +1,7 @@
 import importlib
 import time
 import sys
+import os
 from rich.console import Console
 from rich.text import Text
 from rich.live import Live
@@ -196,8 +197,6 @@ def main():
         art_width = get_art_width()
         glow_cycle = art_width + 40
 
-        console.clear()
-
         with Live(console=console, refresh_per_second=fps, screen=True) as live:
             for _ in range(60):
                 frame = build_frame(glow_x, tick, art_width)
@@ -213,19 +212,33 @@ def main():
         console.clear()
         console.print(Align.left(build_frame(glow_x, tick, art_width)))
 
+        pages = [
+            f for f in os.listdir("pages")
+            if f.startswith("page_") and f.endswith(".py")
+        ]
+
         user_input = input("user@kernel: ~/home$ ").strip()
 
         if user_input == "0":
             print("\n◈ TERMINATING SESSION\n")
             sys.exit(0)
 
-        if user_input.isdigit() and 1 <= int(user_input) <= 10:
-            console.clear()
-            print(f"\nRouting to page_{user_input}...\n")
-            route_to_page(int(user_input))
-            time.sleep(0.6)
+        if user_input.isdigit():
+            page_file = f"page_{user_input}.py"
+
+            if page_file in pages:
+                console.clear()
+                print(f"\nRouting to {page_file}...\n")
+
+                route_to_page(int(user_input))
+
+                console.clear()
+            else:
+                print("\nPage inexistante\n")
+                time.sleep(0.8)
+
         else:
-            print("\nInvalid selection.\n")
+            print("\nCommande invalide\n")
             time.sleep(0.8)
 
 

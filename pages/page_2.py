@@ -1,115 +1,113 @@
-import os
+import psutil
 import platform
-import shutil
-import subprocess
-import sys
-import termios
-import threading
-import tty
+import socket
+import os
+import time
+from datetime import datetime
+from rich.console import Console
+from rich.live import Live
 
-from utils.animation import decrypt_block
+console = Console()
 
 
-def get_system_info() -> list[str]:
-    os_info = f"OS: {platform.system()} {platform.release()}"
+# ─────────────────────────────────────────────
+# GLOW COLOR
+# ─────────────────────────────────────────────
+def glow_color(distance: float) -> str:
+    distance = max(0.0, min(distance, 20.0))
+    intensity = max(0.15, 1.0 - (distance / 18.0))
 
-    cpu_name = platform.processor() or "Unknown CPU"
-    cpu_cores = os.cpu_count() or 1
-    cpu_info = f"CPU: {cpu_name} | Cores: {cpu_cores}"
+    neon_blue = 255
+    neon_cyan = int(140 + 115 * intensity)
+    neon_purple = int(180 * intensity)
 
-    mem_total = 0.0
-    mem_percent = 0.0
+    r = int(neon_purple * (0.4 + intensity))
+    g = int(neon_cyan * (0.7 + intensity))
+    b = int(neon_blue)
+
+    r = max(30, min(255, r))
+    g = max(60, min(255, g))
+    b = max(180, min(255, b))
+
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
+# ─────────────────────────────────────────────
+# HELPERS
+# ─────────────────────────────────────────────
+def get_ip():
     try:
-        with open("/proc/meminfo", "r", encoding="utf-8") as file:
-            lines = file.read().splitlines()
-        mem_total_kb = int(lines[0].split()[1])
-        mem_avail_kb = int([line for line in lines if line.startswith("MemAvailable:")][0].split()[1])
-        mem_total = mem_total_kb / (1024 * 1024)
-        used_kb = mem_total_kb - mem_avail_kb
-        mem_percent = (used_kb / mem_total_kb) * 100 if mem_total_kb else 0.0
-    except Exception:
+        return socket.gethostbyname(socket.gethostname())
+    except:
+        return "Unknown"
+
+
+def uptime():
+    seconds = time.time() - psutil.boot_time()
+    return f"{int(seconds//3600)}h {int((seconds%3600)//60)}m"
+
+
+def boot_time():
+    return datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
+
+
+# ─────────────────────────────────────────────
+# RENDER
+# ─────────────────────────────────────────────
+def render():
+    cpu = psutil.cpu_percent()
+    freq = psutil.cpu_freq()
+    ram = psutil.virtual_memory()
+    disk = psutil.disk_usage('/')
+    processes = len(psutil.pids())
+
+    temp = "N/A"
+    try:
+        temps = psutil.sensors_temperatures()
+        if temps:
+            for name in temps:
+                temp = f"{temps[name][0].current}°C"
+                break
+    except:
         pass
-    ram_info = f"RAM: {mem_total:.2f} GB | Used: {mem_percent:.1f}%"
 
-    disk_total, disk_used, _ = shutil.disk_usage("/")
-    disk_total_gb = disk_total / (1024**3)
-    disk_percent = (disk_used / disk_total * 100) if disk_total else 0.0
-    disk_info = f"Disk: {disk_total_gb:.2f} GB | Used: {disk_percent:.1f}%"
+    return f"""
 
-    gpu_info = "GPU: Not detected"
-    try:
-        if shutil.which("lspci"):
-            result = subprocess.run(["lspci"], capture_output=True, text=True, check=False)
-            gpu_lines = [line.strip() for line in result.stdout.splitlines() if "VGA" in line or "3D" in line or "Display" in line]
-            if gpu_lines:
-                gpu_info = f"GPU: {gpu_lines[0]}"
-    except Exception:
-        gpu_info = "GPU: Not detected"
+[{glow_color(cpu)}]================ SYSTEM INFO ================[/]
 
-    return [os_info, cpu_info, ram_info, disk_info, gpu_info]
+[{glow_color(cpu)}]CPU Usage      : {cpu}%[/]
+[{glow_color(cpu)}]CPU Frequency  : {round(freq.current,2)} MHz[/]
+[{glow_color(cpu)}]CPU Cores      : {psutil.cpu_count()}[/]
+
+[{glow_color(ram.percent)}]RAM Usage      : {ram.percent}%[/]
+[{glow_color(ram.percent)}]RAM Total      : {round(ram.total/1e9,2)} GB[/]
+[{glow_color(ram.percent)}]RAM Available  : {round(ram.available/1e9,2)} GB[/]
+
+[{glow_color(disk.percent)}]Disk Usage     : {disk.percent}%[/]
+[{glow_color(disk.percent)}]Disk Total     : {round(disk.total/1e9,2)} GB[/]
+[{glow_color(disk.percent)}]Disk Free      : {round(disk.free/1e9,2)} GB[/]
+
+[{glow_color(6)}]OS             : {platform.system()} {platform.release()}[/]
+[{glow_color(6)}]Hostname       : {platform.node()}[/]
+[{glow_color(6)}]IP             : {get_ip()}[/]
+
+[{glow_color(3)}]Processes      : {processes}[/]
+[{glow_color(3)}]Temperature    : {temp}[/]
+
+[{glow_color(2)}]Boot Time      : {boot_time()}[/]
+[{glow_color(2)}]Uptime         : {uptime()}[/]
+
+"""
 
 
-def listen_ctrl_x(callback):
-    def _listener() -> None:
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
+# ─────────────────────────────────────────────
+# ENTRY POINT (IMPORTANT POUR TON HOME)
+# ─────────────────────────────────────────────
+def run():
+    with Live(render(), refresh_per_second=2, console=console) as live:
         try:
-            tty.setcbreak(fd)
             while True:
-                char = os.read(fd, 1)
-                if char == b"\x18":
-                    callback()
-                    return
-        except Exception:
-            return
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-
-    thread = threading.Thread(target=_listener, daemon=True)
-    thread.start()
-    return thread
-
-
-def run() -> None:
-    def _go_home() -> None:
-        import home
-        home.main()
-
-    def _render() -> None:
-        infos = get_system_info()
-        decrypt_block([
-            "[KERNEL TOOL :: PAGE 2]",
-            "Decrypting module interface...",
-            "Access granted.",
-            "",
-            "=== SYSTEM INFO ===",
-            *infos,
-            "",
-            "Press CTRL + X to return home",
-        ])
-
-    _render()
-    listen_ctrl_x(_go_home)
-
-    while True:
-        try:
-            user_input = input("user@kernel: ~/home$ ").strip()
-        except (EOFError, KeyboardInterrupt):
-            break
-
-        if user_input == "exit":
-            break
-        if user_input == "clear":
-            print("\033c", end="")
-            _render()
-            continue
-        if user_input == "info":
-            for line in get_system_info():
-                print(line)
-            continue
-
-        print("Command not found")
-
-
-if __name__ == "__main__":
-    run()
+                live.update(render())
+                time.sleep(0.5)
+        except KeyboardInterrupt:
+            pass  # retour propre au home

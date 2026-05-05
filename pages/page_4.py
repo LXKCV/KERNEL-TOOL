@@ -3,12 +3,15 @@ from utils.animation import decrypt_block
 
 def run() -> None:
     decrypt_block([
-        "[KERNEL TOOL :: PAGE 4]",
-        "Decrypting module interface...",
+        "[KERNEL TOOL :: IP LOOKUP]",
+        "...",
         "Access granted.",
         "",
-        "=== TOOL AREA (USER CODE HERE) ===",
-        "(placeholder)",
+
     ])
     # === TOOL AREA (USER CODE HERE) ===
     pass
+
+def run():
+    print("IP LOOKUP")
+    input("Enter to BACK")
