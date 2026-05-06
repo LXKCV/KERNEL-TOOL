@@ -41,7 +41,7 @@ ASCII_LINES = """
                            ║                                                                                                            ║
                            ║                 [1] Tools Infos      │ [2] System Infos      │ [3] Token Login                             ║
                            ║                                                                                                            ║
-                           ║                 [4] IP Lookup        │ [5] IP DDOS (extrem)  │ [6] Osint + Report                          ║
+                           ║                 [4] IP Lookup        │ [5] IP DDOS (extrem)  │ [6] Osint Tools                             ║
                            ║                                                                                                            ║
                            ║                 [7] Osint Tool       │ [8] Osint CTF         │ [9] Tool 9                                  ║
                            ║                                                                                                            ║
