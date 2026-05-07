@@ -14,9 +14,6 @@ def run():
 
 console = Console()
 
-# ─────────────────────────────────────────────
-# ASCII ART (IDENTIQUE MAIS TEXTE MODIFIÉ)
-# ─────────────────────────────────────────────
 
 ASCII_LINES = """
                                            ██ ▄█▀▓█████  ██▀███   ███▄    █ ▓█████  ██▓       ▄▄▄█████▓ ▒█████   ▒█████   ██▓    
@@ -65,10 +62,6 @@ SUBTITLE = ""
 def get_art_width():
     return max(len(line) for line in ASCII_LINES.splitlines())
 
-
-# ─────────────────────────────────────────────
-# GLOW
-# ─────────────────────────────────────────────
 def glow_color(distance):
     distance = max(0.0, min(distance, 20.0))
     intensity = max(0.15, 1.0 - (distance / 18.0))
@@ -100,9 +93,6 @@ def build_frame(glow_x, tick, art_width):
     return frame
 
 
-# ─────────────────────────────────────────────
-# ROUTER OSINT
-# ─────────────────────────────────────────────
 def route_to_osint(choice):
     try:
         module = importlib.import_module(f"osint.osint_{choice}")
@@ -112,10 +102,6 @@ def route_to_osint(choice):
         print(f"Erreur: {e}")
         time.sleep(1)
 
-
-# ─────────────────────────────────────────────
-# MAIN LOOP
-# ─────────────────────────────────────────────
 def run():
     fps = 30
     frame_delay = 1 / fps
