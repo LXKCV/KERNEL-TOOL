@@ -7,9 +7,6 @@ from rich.text import Text
 from rich.live import Live
 from rich.align import Align
 
-# ─────────────────────────────────────────────
-# ASCII ART
-# ─────────────────────────────────────────────
 
 ASCII_LINES = """
                                            ██ ▄█▀▓█████  ██▀███   ███▄    █ ▓█████  ██▓       ▄▄▄█████▓ ▒█████   ▒█████   ██▓    
@@ -61,39 +58,21 @@ def get_art_width() -> int:
     lines = ASCII_LINES.splitlines()
     return max((len(line) for line in lines), default=0)
 
-
-# ─────────────────────────────────────────────
-# GLOW COLOR
-# ─────────────────────────────────────────────
-
 def glow_color(distance: float) -> str:
-    # clamp distance pour éviter des couleurs mortes
     distance = max(0.0, min(distance, 20.0))
-
-    # intensité globale (effet glow)
     intensity = max(0.15, 1.0 - (distance / 18.0))
-
-    # base neon palette (plus agressive, plus visible)
     neon_blue = 255
     neon_cyan = int(140 + 115 * intensity)
     neon_purple = int(180 * intensity)
-
-    # petit shift dynamique pour effet "alive"
+  
     r = int(neon_purple * (0.4 + intensity))
     g = int(neon_cyan * (0.7 + intensity))
     b = int(neon_blue)
-
-    # boost contraste (important pour fond noir)
     r = max(30, min(255, r))
     g = max(60, min(255, g))
     b = max(180, min(255, b))
 
     return f"#{r:02x}{g:02x}{b:02x}"
-
-
-# ─────────────────────────────────────────────
-# TITLE
-# ─────────────────────────────────────────────
 
 def render_title(glow_x: float) -> Text:
     result = Text()
@@ -110,10 +89,6 @@ def render_title(glow_x: float) -> Text:
     return result
 
 
-# ─────────────────────────────────────────────
-# SUBTITLE
-# ─────────────────────────────────────────────
-
 def render_subtitle(glow_x: float, art_width: int) -> Text:
     result = Text()
     offset = max((art_width - len(SUBTITLE)) // 2, 0)
@@ -128,10 +103,6 @@ def render_subtitle(glow_x: float, art_width: int) -> Text:
     return result
 
 
-# ─────────────────────────────────────────────
-# FRAME
-# ─────────────────────────────────────────────
-
 def build_frame(glow_x: float, tick: int, art_width: int) -> Text:
     frame = Text()
 
@@ -140,13 +111,7 @@ def build_frame(glow_x: float, tick: int, art_width: int) -> Text:
     frame.append("\n")
     frame.append_text(render_subtitle(glow_x, art_width))
     frame.append("\n\n")
-
     return frame
-
-
-# ─────────────────────────────────────────────
-# ROUTER
-# ─────────────────────────────────────────────
 
 def route_to_page(choice: int):
     module = importlib.import_module(f"pages.page_{choice}")
@@ -154,9 +119,7 @@ def route_to_page(choice: int):
         module.run()
 
 
-# ─────────────────────────────────────────────
-# MAIN LOOP
-# ─────────────────────────────────────────────
+
 
 def main():
     console = Console()
