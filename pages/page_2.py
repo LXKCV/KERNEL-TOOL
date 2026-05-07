@@ -10,9 +10,7 @@ from rich.live import Live
 console = Console()
 
 
-# ─────────────────────────────────────────────
-# GLOW COLOR
-# ─────────────────────────────────────────────
+
 def glow_color(distance: float) -> str:
     distance = max(0.0, min(distance, 20.0))
     intensity = max(0.15, 1.0 - (distance / 18.0))
@@ -32,9 +30,6 @@ def glow_color(distance: float) -> str:
     return f"#{r:02x}{g:02x}{b:02x}"
 
 
-# ─────────────────────────────────────────────
-# HELPERS
-# ─────────────────────────────────────────────
 def get_ip():
     try:
         return socket.gethostbyname(socket.gethostname())
@@ -51,9 +46,6 @@ def boot_time():
     return datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
 
 
-# ─────────────────────────────────────────────
-# RENDER
-# ─────────────────────────────────────────────
 def render():
     cpu = psutil.cpu_percent()
     freq = psutil.cpu_freq()
@@ -100,9 +92,6 @@ def render():
 """
 
 
-# ─────────────────────────────────────────────
-# ENTRY POINT (IMPORTANT POUR TON HOME)
-# ─────────────────────────────────────────────
 def run():
     with Live(render(), refresh_per_second=2, console=console) as live:
         try:
