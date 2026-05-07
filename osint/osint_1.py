@@ -7,9 +7,7 @@ from rich.align import Align
 
 console = Console()
 
-# ─────────────────────────────────────────────
-# GLOW (IDENTIQUE PANEL)
-# ─────────────────────────────────────────────
+
 def glow_color(distance):
     distance = max(0.0, min(distance, 20.0))
     intensity = max(0.15, 1.0 - (distance / 18.0))
@@ -25,9 +23,7 @@ def glow_color(distance):
     return f"#{r:02x}{g:02x}{b:02x}"
 
 
-# ─────────────────────────────────────────────
-# ASCII
-# ─────────────────────────────────────────────
+
 ASCII_LINES = """
                                            ██ ▄█▀▓█████  ██▀███   ███▄    █ ▓█████  ██▓       ▄▄▄█████▓ ▒█████   ▒█████   ██▓    
                                            ██▄█▒ ▓█   ▀ ▓██ ▒ ██▒ ██ ▀█   █ ▓█   ▀ ▓██▒       ▓  ██▒ ▓▒▒██▒  ██▒▒██▒  ██▒▓██▒    
@@ -41,9 +37,6 @@ ASCII_LINES = """
 """
 
 
-# ─────────────────────────────────────────────
-# RENDER UI
-# ─────────────────────────────────────────────
 def render(glow_x):
     t = Text()
 
@@ -66,16 +59,12 @@ def render(glow_x):
     return t
 
 
-# ─────────────────────────────────────────────
-# IP GENERATOR
-# ─────────────────────────────────────────────
+
 def generate_ip():
     return f"{random.randint(1,255)}.{random.randint(0,255)}.{random.randint(0,255)}.{random.randint(1,255)}"
 
 
-# ─────────────────────────────────────────────
-# MAIN LOOP
-# ─────────────────────────────────────────────
+
 def run():
 
     fps = 30
@@ -83,7 +72,6 @@ def run():
     glow_x = -20
     tick = 0
 
-    # ─── ANIMATION LOOP ───
     with Live(console=console, refresh_per_second=fps, screen=True) as live:
         for _ in range(60):
             frame = render(glow_x)
@@ -96,7 +84,6 @@ def run():
             tick += 1
             time.sleep(frame_delay)
 
-    # ─── INPUT USER ───
     console.clear()
     console.print(render(glow_x))
 
@@ -122,7 +109,6 @@ def run():
         time.sleep(0.8)
         return
 
-    # ─── GENERATION ───
     print(f"\nGENERATING {count} IPs...\n")
 
     ips = []
