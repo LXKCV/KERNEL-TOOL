@@ -1,4 +1,3 @@
-    
 import importlib
 import time
 import sys
@@ -147,7 +146,7 @@ def run():
             if f.startswith("osint_") and f.endswith(".py")
         ]
 
-        user_input = input("osint@kernel: ~/osint-tools$ ").strip()
+        user_input = input("osint@kernel: ~/home/osint-tools$ ").strip()
 
         if user_input == "0":
             break

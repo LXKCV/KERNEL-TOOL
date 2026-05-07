@@ -41,14 +41,13 @@ ASCII_LINES = """
                            ║                                                                                                            ║
                            ║                 [1] Tools Infos      │ [2] System Infos      │ [3] Token Login                             ║
                            ║                                                                                                            ║
-                           ║                 [4] IP Lookup        │ [5] IP DDOS (extrem)  │ [6] Osint Tools                             ║
+                           ║                 [4] Osint Tools      │ [5] IP DDOS (extrem)  │ [6] Osint Tools                             ║
                            ║                                                                                                            ║
                            ║                 [7] Osint Tool       │ [8] Osint CTF         │ [9] Tool 9                                  ║
                            ║                                                                                                            ║
                            ║                 [10] Tool 10         │ [11] SOON..           │ [0] Exit                                    ║
                            ║                                                                                                            ║   
                            ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
-
 
 """
 
@@ -130,28 +129,6 @@ def render_subtitle(glow_x: float, art_width: int) -> Text:
 
 
 # ─────────────────────────────────────────────
-# STATUS BAR
-# ─────────────────────────────────────────────
-
-def render_status(tick: int) -> Text:
-    states = [
-        "◈ SYSTEM ONLINE",
-        "◈ INITIALIZING"
-    ]
-
-    dots = "·" * (tick % 4)
-    label = states[tick % len(states)] + dots
-
-    bar = Text()
-    bar.append("┌──────────────────────────────────────────┐\n", style="#1a3a8f")
-    bar.append("│ ", style="#1a3a8f")
-    bar.append(label.ljust(42), style="bold #00bfff")
-    bar.append("│\n", style="#1a3a8f")
-    bar.append("└──────────────────────────────────────────┘", style="#1a3a8f")
-    return bar
-
-
-# ─────────────────────────────────────────────
 # FRAME
 # ─────────────────────────────────────────────
 
@@ -162,8 +139,6 @@ def build_frame(glow_x: float, tick: int, art_width: int) -> Text:
     frame.append_text(render_title(glow_x))
     frame.append("\n")
     frame.append_text(render_subtitle(glow_x, art_width))
-    frame.append("\n\n")
-    frame.append_text(render_status(tick))
     frame.append("\n\n")
 
     return frame
