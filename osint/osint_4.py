@@ -9,8 +9,75 @@ from rich.align import Align
 console = Console()
 
 # ─────────────────────────────────────────────
-# GLOW
+# DATABASE (INTERNAL OSINT DATA)
 # ─────────────────────────────────────────────
+
+DATA = {
+    "Steam": {
+        "url": "https://steamcommunity.com/id/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Telegram": {
+        "url": "https://t.me/%USERNAME%",
+        "method": "get",
+        "verification": "keyword",
+        "except": ["if you have telegram", "contact @%USERNAME%"]
+    },
+    "TikTok": {
+        "url": "https://www.tiktok.com/@%USERNAME%",
+        "method": "get",
+        "verification": "keyword",
+        "except": ["couldn't find this account", "not found"]
+    },
+    "Instagram": {
+        "url": "https://www.instagram.com/%USERNAME%",
+        "method": "get",
+        "verification": "keyword",
+        "except": ["sorry, this page isn't available"]
+    },
+    "GitHub": {
+        "url": "https://github.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "YouTube": {
+        "url": "https://www.youtube.com/@%USERNAME%",
+        "method": "get",
+        "verification": "keyword",
+        "except": ["this channel does not exist"]
+    },
+    "Twitch": {
+        "url": "https://www.twitch.tv/%USERNAME%",
+        "method": "get",
+        "verification": "keyword",
+        "except": ["isn't currently live", "404"]
+    }
+}
+
+# ─────────────────────────────────────────────
+# ASCII UI (IDENTIQUE)
+# ─────────────────────────────────────────────
+
+ASCII_LINES = """                          
+                                           █    ██   ██████ ▓█████  ██▀███   ███▄    █  ▄▄▄       ███▄ ▄███▓▓█████     ▄████▄   ██░ ██ ▓█████  ▄████▄   ██ ▄█▀▓█████  ██▀███  
+                                           ██  ▓██▒▒██    ▒ ▓█   ▀ ▓██ ▒ ██▒ ██ ▀█   █ ▒████▄    ▓██▒▀█▀ ██▒▓█   ▀    ▒██▀ ▀█  ▓██░ ██▒▓█   ▀ ▒██▀ ▀█   ██▄█▒ ▓█   ▀ ▓██ ▒ ██▒
+                                          ▓██  ▒██░░ ▓██▄   ▒███   ▓██ ░▄█ ▒▓██  ▀█ ██▒▒██  ▀█▄  ▓██    ▓██░▒███      ▒▓█    ▄ ▒██▀▀██░▒███   ▒▓█    ▄ ▓███▄░ ▒███   ▓██ ░▄█ ▒
+                                          ▓▓█  ░██░  ▒   ██▒▒▓█  ▄ ▒██▀▀█▄  ▓██▒  ▐▌██▒░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄    ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄ ▒▓▓▄ ▄██▒▓██ █▄ ▒▓█  ▄ ▒██▀▀█▄  
+                                          ▒▒█████▓ ▒██████▒▒░▒████▒░██▓ ▒██▒▒██░   ▓██░ ▓█   ▓██▒▒██▒   ░██▒░▒████▒   ▒ ▓███▀ ░░▓█▒░██▓░▒████▒▒ ▓███▀ ░▒██▒ █▄░▒████▒░██▓ ▒██▒
+                                         ░▒▓▒ ▒ ▒ ▒ ▒▓▒ ▒ ░░░ ▒░ ░░ ▒▓ ░▒▓░░ ▒░   ▒ ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░   ░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░░ ░▒ ▒  ░▒ ▒▒ ▓▒░░ ▒░ ░░ ▒▓ ░▒▓░
+                                         ░░▒░ ░ ░ ░ ░▒  ░ ░ ░ ░  ░  ░▒ ░ ▒░░ ░░   ░ ▒░  ▒   ▒▒ ░░  ░      ░ ░ ░  ░     ░  ▒    ▒ ░▒░ ░ ░ ░  ░  ░  ▒   ░ ░▒ ▒░ ░ ░  ░  ░▒ ░ ▒░
+                                          ░░░ ░ ░ ░  ░  ░     ░     ░░   ░    ░   ░ ░   ░   ▒   ░      ░      ░      ░         ░  ░░ ░   ░   ░        ░ ░░ ░    ░     ░░   ░ 
+                                            ░           ░     ░  ░   ░              ░       ░  ░       ░      ░  ░   ░ ░       ░  ░  ░   ░  ░░ ░      ░  ░      ░  ░   ░     
+                                                                                             ░                       ░  
+"""
+
+# ─────────────────────────────────────────────
+# GLOW SYSTEM
+# ─────────────────────────────────────────────
+
 def glow_color(distance):
     distance = max(0.0, min(distance, 20.0))
     intensity = max(0.15, 1.0 - (distance / 18.0))
@@ -19,227 +86,159 @@ def glow_color(distance):
     g = int((140 + 115 * intensity) * (0.7 + intensity))
     b = 255
 
-    r = max(30, min(255, r))
-    g = max(60, min(255, g))
-    b = max(180, min(255, b))
-
     return f"#{r:02x}{g:02x}{b:02x}"
 
 
 # ─────────────────────────────────────────────
-# ASCII
+# STATE
 # ─────────────────────────────────────────────
-ASCII_LINES = """
-                                           █    ██   ██████ ▓█████  ██▀███   ███▄    █  ▄▄▄       ███▄ ▄███▓▓█████
-                                           ██  ▓██▒▒██    ▒ ▓█   ▀ ▓██ ▒ ██▒ ██ ▀█   █ ▒████▄    ▓██▒▀█▀ ██▒▓█   ▀
-                                          ▓██  ▒██░░ ▓██▄   ▒███   ▓██ ░▄█ ▒▓██  ▀█ ██▒▒██  ▀█▄  ▓██    ▓██░▒███
-                                          ▓▓█  ░██░  ▒   ██▒▒▓█  ▄ ▒██▀▀█▄  ▓██▒  ▐▌██▒░██▄▄▄▄██ ▒██    ▒██ ▒▓█  ▄
-                                          ▒▒█████▓ ▒██████▒▒░▒████▒░██▓ ▒██▒▒██░   ▓██░ ▓█   ▓██▒▒██▒   ░██▒░▒████▒
-                                          ░▒▓▒ ▒ ▒ ▒ ▒▓▒ ▒ ░░░ ▒░ ░░ ▒▓ ░▒▓░░ ▒░   ▒ ▒  ▒▒   ▓▒█░░ ▒░   ░  ░░░ ▒░ ░
-                                          ░░▒░ ░ ░ ░ ░▒  ░ ░ ░ ░  ░  ░▒ ░ ▒░░ ░░   ░ ▒░  ▒   ▒▒ ░░  ░      ░ ░ ░  ░
-                                           ░░░ ░ ░ ░  ░  ░     ░     ░░   ░    ░   ░ ░   ░   ▒   ░      ░      ░
-                                             ░           ░     ░  ░   ░              ░       ░  ░       ░      ░  ░
-"""
+
+results = []
+found = 0
+checked = 0
+username_global = ""
 
 
 # ─────────────────────────────────────────────
-# SITES
+# UI RENDER
 # ─────────────────────────────────────────────
-SITES = {
-    "GitHub": "https://github.com/{}",
-    "Reddit": "https://reddit.com/user/{}",
-    "TikTok": "https://www.tiktok.com/@{}",
-    "Instagram": "https://www.instagram.com/{}/",
-    "Twitter": "https://x.com/{}",
-    "Twitch": "https://www.twitch.tv/{}",
-    "Steam": "https://steamcommunity.com/id/{}",
-    "Pinterest": "https://www.pinterest.com/{}/",
-    "Roblox": "https://www.roblox.com/user.aspx?username={}",
-    "YouTube": "https://www.youtube.com/@{}",
-    "Telegram": "https://t.me/{}",
-    "Snapchat": "https://www.snapchat.com/add/{}",
-    "Spotify": "https://open.spotify.com/user/{}",
-    "GitLab": "https://gitlab.com/{}",
-    "SoundCloud": "https://soundcloud.com/{}",
-    "Medium": "https://medium.com/@{}",
-    "Patreon": "https://www.patreon.com/{}",
-    "Kaggle": "https://www.kaggle.com/{}",
-    "DockerHub": "https://hub.docker.com/u/{}",
-    "VSCO": "https://vsco.co/{}/gallery",
-    "Chess": "https://www.chess.com/member/{}",
-    "Pastebin": "https://pastebin.com/u/{}",
-    "Fiverr": "https://www.fiverr.com/{}",
-    "DeviantArt": "https://www.deviantart.com/{}",
-    "Behance": "https://www.behance.net/{}",
-    "Guns.lol": "https://guns.lol/{}",
-}
 
-
-# ─────────────────────────────────────────────
-# RENDER UI
-# ─────────────────────────────────────────────
 def render(glow_x):
     t = Text()
 
     for i, line in enumerate(ASCII_LINES.splitlines()):
-        color = glow_color(abs(i - glow_x))
-        t.append(line + "\n", style=f"bold {color}")
+        t.append(line + "\n", style=f"bold {glow_color(abs(i - glow_x))}")
 
-    title = "ENTER USERNAME TO CHECK"
-    sub = "(0 = BACK)"
+    t.append("\n╔════════════════════════════╗\n", style="cyan")
+    t.append("║   OSINT USERNAME SCANNER  ║\n", style="cyan")
+    t.append("╚════════════════════════════╝\n", style="cyan")
 
-    color = glow_color(glow_x)
-    width = max(len(title), len(sub))
+    t.append(f"\nTARGET : {username_global}")
+    t.append(f"\nFOUND  : {found}/{len(DATA)}")
+    t.append(f"\nCHECKED: {checked}\n")
 
-    t.append("\n")
-    t.append("╔" + "═" * (width + 2) + "╗\n", style=color)
-    t.append(f"║ {title.ljust(width)} ║\n", style=color)
-    t.append(f"║ {sub.ljust(width)} ║\n", style=color)
-    t.append("╚" + "═" * (width + 2) + "╝\n", style=color)
+    t.append("\n──── LIVE RESULTS ────\n")
 
-    return t
+    for r in results[-10:]:
+        t.append(r + "\n")
+
+    return Align.left(t)
 
 
 # ─────────────────────────────────────────────
-# CHECKER
+# CORE CHECK ENGINE (MERGED LOGIC)
 # ─────────────────────────────────────────────
-async def check_site(session, site, url, username):
-    full_url = url.format(username)
 
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
+async def check(session, name, data, username):
+    url = data["url"].replace("%USERNAME%", username)
+    method = data.get("method", "get")
+    verification = data.get("verification", "status")
+    except_list = data.get("except") or []
 
     try:
-        async with session.get(
-            full_url,
-            headers=headers,
-            timeout=8,
-            allow_redirects=True
-        ) as response:
+        if method == "post":
+            r = await session.post(url, timeout=10)
+        else:
+            r = await session.get(url, timeout=10)
 
-            text = await response.text()
+        text = (await r.text()).lower()
 
-            if response.status == 200:
+        ok = False
 
-                lower = text.lower()
+        # ── STATUS MODE ──
+        if verification == "status":
+            ok = (r.status == 200)
 
-                bad_strings = [
-                    "not found",
-                    "page unavailable",
-                    "doesn't exist",
-                    "error",
-                    "404"
-                ]
+        # ── KEYWORD MODE ──
+        elif verification == "keyword":
+            ok = True
+            for bad in except_list:
+                if bad and bad.lower() in text:
+                    ok = False
 
-                if any(x in lower for x in bad_strings):
-                    return ("MISS", site, full_url)
+        # fallback anti false positive
+        if "not found" in text or "doesn't exist" in text:
+            ok = False
 
-                return ("FOUND", site, full_url)
-
-            return ("MISS", site, full_url)
+        return name, url, ok
 
     except:
-        return ("ERROR", site, full_url)
+        return name, url, False
 
 
-async def scan_username(username):
+# ─────────────────────────────────────────────
+# SCANNER ENGINE
+# ─────────────────────────────────────────────
 
-    results = []
+async def scanner(username):
+    global results, found, checked
 
-    connector = aiohttp.TCPConnector(ssl=False)
+    async with aiohttp.ClientSession() as session:
 
-    async with aiohttp.ClientSession(
-        connector=connector
-    ) as session:
+        tasks = [
+            check(session, name, data, username)
+            for name, data in DATA.items()
+        ]
 
-        tasks = []
+        for task in asyncio.as_completed(tasks):
+            name, url, ok = await task
 
-        for site, url in SITES.items():
-            tasks.append(
-                check_site(session, site, url, username)
-            )
+            checked += 1
 
-        results = await asyncio.gather(*tasks)
-
-    return results
+            if ok:
+                found += 1
+                results.append(f"[FOUND] {name:<12} → {url}")
+            else:
+                results.append(f"[MISS ] {name}")
 
 
 # ─────────────────────────────────────────────
 # MAIN
 # ─────────────────────────────────────────────
+
 def run():
+    global results, found, checked, username_global
 
-    fps = 30
-    frame_delay = 1 / fps
-    glow_x = -20
-
-    # ─── INTRO ANIMATION ───
-    with Live(console=console, refresh_per_second=fps, screen=True) as live:
-
-        for _ in range(60):
-
-            frame = render(glow_x)
-            live.update(Align.left(frame))
-
-            glow_x += 2.5
-
-            if glow_x > len(ASCII_LINES.splitlines()) + 40:
-                glow_x = -20
-
-            time.sleep(frame_delay)
-
-    # ─── INPUT ───
-    console.clear()
-    console.print(render(glow_x))
-
-    username = input(
-        "osint@kernel: ~/home/osint-tools/username-checker$ "
-    ).strip()
-
-    if username == "0":
-        return
-
-    if len(username) < 2:
-        print("invalid username")
-        time.sleep(1)
-        return
-
-    console.clear()
-
-    print(f"\nSCANNING 100+ SITES FOR: {username}\n")
-
-    start = time.time()
-
-    results = asyncio.run(
-        scan_username(username)
-    )
-
+    results = []
     found = 0
-    miss = 0
-    errors = 0
+    checked = 0
 
-    for status, site, url in results:
+    glow_x = -10
 
-        if status == "FOUND":
-            found += 1
-            print(f"[FOUND] {site:<20} -> {url}")
+    # BOOT ANIMATION
+    with Live(console=console, refresh_per_second=30, screen=True) as live:
+        for _ in range(40):
+            live.update(Align.left(render(glow_x)))
+            glow_x += 2
+            time.sleep(0.03)
 
-        elif status == "MISS":
-            miss += 1
-            print(f"[MISS ] {site:<20}")
+    console.clear()
 
-        else:
-            errors += 1
-            print(f"[ERROR] {site:<20}")
+    username_global = input("osint@kernel: ~/home/osint-tools/username-checker$ ").strip()
 
-    elapsed = round(time.time() - start, 2)
+    if username_global == "0":
+        return
 
-    print("\n══════════════════════════════")
-    print(f"FOUND : {found}")
-    print(f"MISS  : {miss}")
-    print(f"ERROR : {errors}")
-    print(f"TIME  : {elapsed}s")
-    print("══════════════════════════════")
+    console.clear()
 
-    input("\nENTER TO BACK...")
+    async def live_mode():
+        task = asyncio.create_task(scanner(username_global))
+
+        with Live(console=console, refresh_per_second=30, screen=True) as live:
+            while not task.done():
+                live.update(render(glow_x))
+                time.sleep(0.05)
+
+            await task
+
+    asyncio.run(live_mode())
+
+    console.clear()
+
+    print("\nSCAN FINISHED\n")
+    print(f"FOUND: {found}/{len(DATA)}\n")
+
+    for r in results:
+        print(r)
+
+    input("\n0 = BACK")
