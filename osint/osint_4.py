@@ -54,6 +54,162 @@ DATA = {
         "method": "get",
         "verification": "keyword",
         "except": ["isn't currently live", "404"]
+    },
+    "Steam": {
+        "url": "https://steamcommunity.com/id/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Telegram": {
+        "url": "https://t.me/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "TikTok": {
+        "url": "https://www.tiktok.com/@%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Instagram": {
+        "url": "https://www.instagram.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "PayPal": {
+        "url": "https://www.paypal.com/paypalme/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "GitHub": {
+        "url": "https://github.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Pinterest": {
+        "url": "https://www.pinterest.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Snapchat": {
+        "url": "https://www.snapchat.com/add/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Tumblr": {
+        "url": "https://%USERNAME%.tumblr.com",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "SoundCloud": {
+        "url": "https://soundcloud.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "DeviantArt": {
+        "url": "https://www.deviantart.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "AboutMe": {
+        "url": "https://about.me/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Flickr": {
+        "url": "https://www.flickr.com/people/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Keybase": {
+        "url": "https://keybase.io/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "LastFM": {
+        "url": "https://www.last.fm/user/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Behance": {
+        "url": "https://www.behance.net/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Quora": {
+        "url": "https://www.quora.com/profile/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Patreon": {
+        "url": "https://www.patreon.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Kaggle": {
+        "url": "https://www.kaggle.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Disqus": {
+        "url": "https://disqus.com/by/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Mastodon": {
+        "url": "https://mastodon.social/@%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "GitLab": {
+        "url": "https://gitlab.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "CodeWars": {
+        "url": "https://www.codewars.com/users/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Spotify": {
+        "url": "https://open.spotify.com/user/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "YouTube": {
+        "url": "https://www.youtube.com/@%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
+    },
+    "Facebook": {
+        "url": "https://www.facebook.com/%USERNAME%",
+        "method": "get",
+        "verification": "status",
+        "except": None
     }
 }
 
@@ -106,8 +262,7 @@ username_global = ""
 def render(glow_x):
     t = Text()
 
-    for i, line in enumerate(ASCII_LINES.splitlines()):
-        t.append(line + "\n", style=f"bold {glow_color(abs(i - glow_x))}")
+    for i, line in enumerate([l for l in ASCII_LINES.splitlines() if l.strip()]):        t.append(line + "\n", style=f"bold {glow_color(abs(i - glow_x))}")
 
     t.append("\n╔════════════════════════════╗\n", style="cyan")
     t.append("║   OSINT USERNAME SCANNER  ║\n", style="cyan")
@@ -117,7 +272,7 @@ def render(glow_x):
     t.append(f"\nFOUND  : {found}/{len(DATA)}")
     t.append(f"\nCHECKED: {checked}\n")
 
-    t.append("\n──── LIVE RESULTS ────\n")
+    t.append("\nosint@kernel: ~/home/osint-tools/username-checker$ \n")
 
     for r in results[-10:]:
         t.append(r + "\n")
@@ -221,17 +376,19 @@ def run():
 
     console.clear()
 
-    async def live_mode():
-        task = asyncio.create_task(scanner(username_global))
-
-        with Live(console=console, refresh_per_second=30, screen=True) as live:
-            while not task.done():
-                live.update(render(glow_x))
-                time.sleep(0.05)
-
-            await task
-
     asyncio.run(live_mode())
+
+async def live_mode():
+    task = asyncio.create_task(scanner(username_global))
+
+    glow_x = -10
+
+    with Live(render(glow_x), refresh_per_second=30, console=console, screen=True) as live:
+        while not task.done():
+            live.update(render(glow_x))
+            await asyncio.sleep(0.05)
+
+        await task
 
     console.clear()
 
