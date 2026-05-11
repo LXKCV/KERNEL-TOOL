@@ -1,17 +1,13 @@
-from utils.animation import decrypt_block
+from config import decrypt_block, print_ascii_header
 
 
-def run() -> None:
+def run():
+    print_ascii_header("IP DDOS")
     decrypt_block([
         "[KERNEL TOOL :: IP DDOS]",
         "...",
         "Access granted.",
         "",
-
     ])
-    # === TOOL AREA (USER CODE HERE) ===
-    pass
-
-def run():
-    print("IP DDOS ")
+    print("IP DDOS")
     input("Enter to BACK")

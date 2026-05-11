@@ -1,16 +1,13 @@
-from utils.animation import decrypt_block
+from config import decrypt_block, print_ascii_header
 
 
-def run() -> None:
+def run():
+    print_ascii_header("TOOL INFOS")
     decrypt_block([
         "[KERNEL TOOL :: TOOL INFOS]",
         "...",
         "Access granted.",
         "",
     ])
-    # === TOOL AREA (USER CODE HERE) ===
-    pass
-
-def run():
     print("TOOL INFOS")
     input("Enter to BACK")
