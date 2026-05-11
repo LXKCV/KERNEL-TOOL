@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.text import Text
 from rich.live import Live
 from rich.align import Align
+from config import glow_color
 
 # ─────────────────────────────────────────────
 # ASCII ART
@@ -65,31 +66,6 @@ def get_art_width() -> int:
 # ─────────────────────────────────────────────
 # GLOW COLOR
 # ─────────────────────────────────────────────
-
-def glow_color(distance: float) -> str:
-    # clamp distance pour éviter des couleurs mortes
-    distance = max(0.0, min(distance, 20.0))
-
-    # intensité globale (effet glow)
-    intensity = max(0.15, 1.0 - (distance / 18.0))
-
-    # base neon palette (plus agressive, plus visible)
-    neon_blue = 255
-    neon_cyan = int(140 + 115 * intensity)
-    neon_purple = int(180 * intensity)
-
-    # petit shift dynamique pour effet "alive"
-    r = int(neon_purple * (0.4 + intensity))
-    g = int(neon_cyan * (0.7 + intensity))
-    b = int(neon_blue)
-
-    # boost contraste (important pour fond noir)
-    r = max(30, min(255, r))
-    g = max(60, min(255, g))
-    b = max(180, min(255, b))
-
-    return f"#{r:02x}{g:02x}{b:02x}"
-
 
 # ─────────────────────────────────────────────
 # TITLE
