@@ -1,0 +1,8 @@
+{
+  "ExamplePlatform": {
+    "url": "https://example.com/%USERNAME%",
+    "method": "get",
+    "verification": "status",
+    "except": []
+  }
+}
