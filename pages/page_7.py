@@ -1,4 +1,5 @@
 from config import decrypt_block, print_ascii_header
+from config import decrypt_block
 
 
 def run() -> None:

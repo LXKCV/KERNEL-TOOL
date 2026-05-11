@@ -10,6 +10,7 @@ from rich.text import Text
 from rich.live import Live
 from rich.align import Align
 from config import glow_color, Add, Error, Info, Input, WaitMsg, print_ascii_header
+from config import glow_color
 
 console = Console()
 
