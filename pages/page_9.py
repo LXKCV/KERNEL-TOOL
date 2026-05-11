@@ -1,7 +1,8 @@
+from config import decrypt_block, print_ascii_header
 from config import decrypt_block
 
-
 def run() -> None:
+    print_ascii_header("PAGE 9")
     decrypt_block([
         "[KERNEL TOOL :: PAGE 9]",
         "Decrypting module interface...",

@@ -9,6 +9,7 @@ from rich.console import Console
 from rich.text import Text
 from rich.live import Live
 from rich.align import Align
+from config import glow_color, Add, Error, Info, Input, WaitMsg, print_ascii_header
 from config import glow_color
 
 console = Console()
@@ -135,10 +136,13 @@ async def scanner(username):
             if ok:
                 found += 1
                 results.append(f"[FOUND] {name:<15} -> {url}")
+                Add(f"{name}: {url}")
             elif err:
                 results.append(f"[ERROR] {name:<15} -> {err}")
+                Error(f"{name}: {err}")
             else:
                 results.append(f"[MISS ] {name}")
+                Error(f"{name}: Not found")
 
 
 def run():
@@ -156,7 +160,8 @@ def run():
             time.sleep(0.03)
 
     console.clear()
-    username_global = input("osint@kernel: ~/home/osint-tools/username-checker$ ").strip()
+    print_ascii_header("OSINT USERNAME TRACKER")
+    username_global = Input("Target username -> ").strip()
     if username_global == "0":
         return
 

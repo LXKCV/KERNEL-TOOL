@@ -1,3 +1,8 @@
+from config import decrypt_block, print_ascii_header
+
+
+def run():
+    print_ascii_header("TOKEN LOGIN")
 from config import decrypt_block
 
 
