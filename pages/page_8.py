@@ -1,4 +1,4 @@
-from utils.animation import decrypt_block
+from config import decrypt_block
 
 
 def run() -> None:

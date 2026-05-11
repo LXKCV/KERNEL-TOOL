@@ -9,6 +9,7 @@ from rich.console import Console
 from rich.text import Text
 from rich.live import Live
 from rich.align import Align
+from config import glow_color
 
 console = Console()
 
@@ -40,15 +41,6 @@ ASCII_LINES = """
                                             ░           ░     ░  ░   ░              ░       ░  ░       ░      ░  ░   ░ ░       ░  ░  ░   ░  ░░ ░      ░  ░      ░  ░   ░     
                                                                                              ░                       ░  
 """
-
-
-def glow_color(distance):
-    distance = max(0.0, min(distance, 20.0))
-    intensity = max(0.15, 1.0 - (distance / 18.0))
-    r = int(180 * (0.4 + intensity))
-    g = int((140 + 115 * intensity) * (0.7 + intensity))
-    b = 255
-    return f"#{r:02x}{g:02x}{b:02x}"
 
 
 results = []
