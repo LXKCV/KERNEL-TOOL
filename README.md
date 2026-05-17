@@ -237,10 +237,8 @@ python home.py
 
 # 👨‍💻 Credits
 
-| Role | Name |
-|---|---|
-| Founder | Astral |
-| Developer | LXKCV |
+#### Founder: Astral 
+#### Developer: LXKCV 
 
 ---
 
