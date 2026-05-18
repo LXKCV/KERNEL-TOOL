@@ -1,17 +1,13 @@
-from utils.animation import decrypt_block
+from config import decrypt_block, print_ascii_header
 
 
-def run() -> None:
+def run():
+    print_ascii_header("TOKEN LOGIN")
     decrypt_block([
         "[KERNEL TOOL :: TOKEN LOGIN]",
         "...",
         "Access granted.",
         "",
-
     ])
-    # === TOOL AREA (USER CODE HERE) ===
-    pass
-
-def run():
     print("TOKEN LOGIN")
     input("Enter to BACK")

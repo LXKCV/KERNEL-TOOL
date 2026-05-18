@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 from rich.console import Console
 from rich.live import Live
+from config import glow_color
 
 console = Console()
 
@@ -13,25 +14,6 @@ console = Console()
 # ─────────────────────────────────────────────
 # GLOW COLOR
 # ─────────────────────────────────────────────
-def glow_color(distance: float) -> str:
-    distance = max(0.0, min(distance, 20.0))
-    intensity = max(0.15, 1.0 - (distance / 18.0))
-
-    neon_blue = 255
-    neon_cyan = int(140 + 115 * intensity)
-    neon_purple = int(180 * intensity)
-
-    r = int(neon_purple * (0.4 + intensity))
-    g = int(neon_cyan * (0.7 + intensity))
-    b = int(neon_blue)
-
-    r = max(30, min(255, r))
-    g = max(60, min(255, g))
-    b = max(180, min(255, b))
-
-    return f"#{r:02x}{g:02x}{b:02x}"
-
-
 # ─────────────────────────────────────────────
 # HELPERS
 # ─────────────────────────────────────────────
