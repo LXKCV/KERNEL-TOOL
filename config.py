@@ -4,6 +4,7 @@ import sys
 import time
 import datetime
 
+# Colors (ANSI)
 red = "\033[31m"
 light_red = "\033[91m"
 white = "\033[97m"
@@ -27,7 +28,6 @@ ASCII_HEADER = r"""
 ▓██ █▄ ▒▓█  ▄ ▒██▀▀█▄  ▓██▒  ▐▌██▒▒▓█  ▄ ▒██░        ░ ▓██▓ ░ ▒██   ██░▒██   ██░▒██░
 ▒██▒ █▄░▒████▒░██▓ ▒██▒▒██░   ▓██░░▒████▒░██████▒      ▒██▒ ░ ░ ████▓▒░░ ████▓▒░░██████▒
 """
-
 
 
 def glow_color(distance: float) -> str:
@@ -94,7 +94,6 @@ def decrypt_print(text: str, delay: float = 0.008, scramble_cycles: int = 2) -> 
             sys.stdout.write(ch)
             sys.stdout.flush()
             continue
-
 
         for _ in range(scramble_cycles):
             sys.stdout.write(random.choice(alphabet))
