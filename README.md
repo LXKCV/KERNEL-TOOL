@@ -1,7 +1,7 @@
 # KERNEL TOOL
 
 > Advanced Cybersecurity MultiTool focused on OSINT, Pentest, DNS Analysis, Username Research and Network Utilities.
-
+> ⚠ Currently under development
 ---
 
 # 📚 Table of Contents
@@ -56,6 +56,7 @@ The goal of the project is to create an all-in-one cyber framework for researche
 ---
 
 ## 🌐 DNS & Network
+> ⚠ Currently under development
 - DNS scanner
 - Port analysis
 - Domain information
@@ -65,7 +66,6 @@ The goal of the project is to create an all-in-one cyber framework for researche
 ---
 
 ## 👤 Username Research
-> ⚠ Currently under development
 
 - Multi-platform username search
 - Social media detection
@@ -85,6 +85,7 @@ The goal of the project is to create an all-in-one cyber framework for researche
 ---
 
 ## ⚔ Pentest Utilities
+> ⚠ Currently under development
 - Recon modules
 - Scanner utilities
 - Enumeration systems
@@ -236,10 +237,8 @@ python home.py
 
 # 👨‍💻 Credits
 
-| Role | Name |
-|---|---|
-| Founder | Astral |
-| Developer | LXKCV |
+#### Founder: Astral 
+#### Developer: LXKCV 
 
 ---
 

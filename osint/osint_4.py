@@ -10,6 +10,8 @@ from rich.text import Text
 from rich.live import Live
 from rich.align import Align
 from config import glow_color, Add, Error
+from config import glow_color, Add, Error, Info, Input, WaitMsg, print_ascii_header
+from config import glow_color
 
 console = Console()
 
@@ -159,7 +161,8 @@ def run():
             time.sleep(0.03)
 
     console.clear()
-    username_global = input("osint@kernel: ~/home/osint-tools/username-checker$ ").strip()
+    print_ascii_header("OSINT USERNAME TRACKER")
+    username_global = Input("Target username -> ").strip()
     if username_global == "0":
         return
 
